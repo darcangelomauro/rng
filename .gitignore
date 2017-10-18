@@ -1,0 +1,24 @@
+# *** devel ***
+
+# ignore everything
+devel/action_consistency/*
+
+# unignore .c and Makefile
+!devel/action_consistency/*.c
+!devel/action_consistency/Makefile
+
+
+
+
+
+# *** main ***
+
+# ignore everything
+main/*
+
+# unignore .c, .md and Makefile
+!main/*.c
+!main/*.md
+!main/Makefile
+
+
