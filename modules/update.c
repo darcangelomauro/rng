@@ -417,8 +417,8 @@ int move(void Sfunc(double*, int*), int mode, gsl_rng* r)
     int check = 0;
 
     // MONTECARLO MOVE PROPOSAL
-    double S1[6];
-    int control[6] = {1,0,0,0,0,0};
+    double S1[14];
+    int control[14] = {1,0,0,0,0,0,0,0,0,0,0,0,0,0};
     if(mode) control[1] = 1;
 
     

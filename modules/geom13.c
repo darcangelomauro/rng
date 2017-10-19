@@ -28,9 +28,9 @@ void init_gamma13()
 {
     
     for(int i=0; i<nH; i++)
-        gammaH[i] = gsl_matrix_complex_calloc(dimG, dimG);
-    for(int i=0; i<nL; i++)
-        gammaL[i] = gsl_matrix_complex_calloc(dimG, dimG);
+            gammaH[i] = gsl_matrix_complex_calloc(dimG, dimG);
+        for(int i=0; i<nL; i++)
+            gammaL[i] = gsl_matrix_complex_calloc(dimG, dimG);
 
 
     // gamma H0
