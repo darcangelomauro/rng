@@ -52,7 +52,7 @@ void print_thermalization_plus(FILE* fobsStr)
 {
     fprintf(fobsStr, "%.15lf ", S);
     for(int i=0; i<nH; i++)
-        fprintf(fobsStr, "%.15lf %.15lf", tr[i], tr2[i]);
+        fprintf(fobsStr, "%.15lf %.15lf ", tr[i], tr2[i]);
     fprintf(fobsStr, "\n");
 
 }
@@ -62,7 +62,7 @@ void print_simulation(FILE* fobsS, FILE* fobsHL)
     // print action
     fprintf(fobsS, "%.15lf ", S);
     for(int i=0; i<nH; i++)
-        fprintf(fobsS, "%.15lf %.15lf", tr[i], tr2[i]);
+        fprintf(fobsS, "%.15lf %.15lf ", tr[i], tr2[i]);
     fprintf(fobsS, "\n");
 
     // print H matrices

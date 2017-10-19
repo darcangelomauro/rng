@@ -224,8 +224,8 @@ void init_cold(void Sfunc(double*, int*), void init_gamma())
     
 
     // initialize action
-    double var[6];
-    int control[6] = {1,0,0,0,0,0};
+    double var[14];
+    int control[14] = {1,0,1,1,1,1,1,1,1,1,1,1,1,1};
     Sfunc(var, control);
     S = var[0];
 
@@ -296,8 +296,8 @@ void init_custom(void Sfunc(double*, int*), void init_gamma(), char* filename)
     
 
     // initialize action and traces
-    double var[6];
-    int control[6] = {1,0,1,1,1,1};
+    double var[14];
+    int control[14] = {1,0,1,1,1,1,1,1,1,1,1,1,1,1};
     Sfunc(var, control);
 
     S = var[0];
@@ -347,8 +347,8 @@ void init_hot(void Sfunc(double*, int*), void init_gamma(), gsl_rng* r)
     
 
     // initialize action and traces
-    double var[6];
-    int control[6] = {1,0,1,1,1,1};
+    double var[14];
+    int control[14] = {1,0,1,1,1,1,1,1,1,1,1,1,1,1};
     Sfunc(var, control);
 
     S = var[0];
@@ -418,7 +418,7 @@ int move(void Sfunc(double*, int*), int mode, gsl_rng* r)
 
     // MONTECARLO MOVE PROPOSAL
     double S1[14];
-    int control[14] = {1,0,0,0,0,0,0,0,0,0,0,0,0,0};
+    int control[14] = {1,0,1,1,1,1,1,1,1,1,1,1,1,1};
     if(mode) control[1] = 1;
 
     
