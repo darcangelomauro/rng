@@ -660,7 +660,7 @@ b1 = block(g1, "Id", "L1", -1, 1, "b1")
 list1 = [a0, a1, b0, b1]
 """
 
-#"""
+"""
 # (2,0) geom
 init = ["H[0]", "H[1]"]
 init_mod = ["H0", "H1"]
@@ -672,7 +672,7 @@ b0 = block(g1, "H1", "Id", 1, 0, "b0")
 b1 = block(g1, "Id", "TH1", 1, 0, "b1")
 
 list1 = [a0, a1, b0, b1]
-#"""
+"""
 
 """
 # (1,1) geom
@@ -737,6 +737,141 @@ i1 = block(g7, "Id", "TH1", 1, 0, "i1")
 list1 = [a0, a1, b0, b1, c0, c1, d0, d1, e0, e1, f0, f1, h0, h1, i0, i1]
 """
 
+#"""
+# (0,4) geom
+init = ["H[0]", "H[1]", "H[2]", "H[3]", "L[0]", "L[1]", "L[2]", "L[3]"]
+init_mod = ["H0", "H1", "H2", "H3", "L0", "L1", "L2", "L3"]
+
+g0 = matrix([[(-1+0j), 0j, 0j, 0j], [0j, (1+0j), 0j, 0j], [0j, 0j, (-1+0j), 0j], [0j, 0j, 0j, (1+0j)]])
+g1 = matrix([[0j, 1j, 0j, 0j], [-1j, 0j, 0j, 0j], [0j, 0j, 0j, 1j], [0j, 0j, -1j, 0j]])
+g2 = matrix([[0j, (-1+0j), 0j, 0j], [(-1+0j), 0j, 0j, 0j], [0j, 0j, 0j, (1+0j)], [0j, 0j, (1+0j), 0j]])
+g3 = matrix([[0j, 0j, 0j, 1j], [0j, 0j, 1j, 0j], [0j, -1j, 0j, 0j], [-1j, 0j, 0j, 0j]])
+g4 = matrix([[1j, 0j, 0j, 0j], [0j, 1j, 0j, 0j], [0j, 0j, -1j, -0j], [0j, 0j, -0j, -1j]])
+g5 = matrix([[0.0, 0.0, 1.0, 0.0], [0.0, 0.0, 0.0, 1.0], [-1.0, -0.0, 0.0, 0.0], [-0.0, -1.0, 0.0, 0.0]])
+g6 = matrix([[0j, 0j, 1j, 0j], [0j, -0j, 0j, -1j], [1j, 0j, 0j, 0j], [0j, -1j, 0j, -0j]])
+g7 = matrix([[0j, 0j, 0j, (1+0j)], [(-0+0j), 0j, (-1+0j), 0j], [0j, (1+0j), 0j, 0j], [(-1+0j), 0j, (-0+0j), 0j]])
+
+a0 = block(g0, "H0", "Id", 1, 0, "a0")
+a1 = block(g0, "Id", "TH0", 1, 0, "a1")
+b0 = block(g1, "H1", "Id", 1, 0, "b0")
+b1 = block(g1, "Id", "TH1", 1, 0, "b1")
+c0 = block(g2, "H2", "Id", 1, 0, "c0")
+c1 = block(g2, "Id", "TH2", 1, 0, "c1")
+d0 = block(g3, "H3", "Id", 1, 0, "d0")
+d1 = block(g3, "Id", "TH3", 1, 0, "d1")
+e0 = block(g4, "L0", "Id", 1, 1, "e0")
+e1 = block(g4, "Id", "TL0", -1, 1, "e1")
+f0 = block(g5, "L1", "Id", 1, 1, "f0")
+f1 = block(g5, "Id", "TL1", -1, 1, "f1")
+h0 = block(g6, "L2", "Id", 1, 1, "h0")
+h1 = block(g6, "Id", "TL2", -1, 1, "h1")
+i0 = block(g7, "L3", "Id", 1, 1, "i0")
+i1 = block(g7, "Id", "TL3", -1, 1, "i1")
+list1 = [a0, a1, b0, b1, c0, c1, d0, d1, e0, e1, f0, f1, h0, h1, i0, i1]
+#"""
+
+
+"""
+# (4,0) geom
+init = ["H[0]", "H[1]", "H[2]", "H[3]", "L[0]", "L[1]", "L[2]", "L[3]"]
+init_mod = ["H0", "H1", "H2", "H3", "L0", "L1", "L2", "L3"]
+
+g0 = matrix([[1.0, 0.0, 0.0, 0.0],[0.0, 1.0, 0.0, 0.0],[0.0, 0.0, -1.0, -0.0],[0.0, 0.0, -0.0, -1.0]])
+g1 = matrix([[0.0, 0.0, 1.0, 0.0],[0.0, 0.0, 0.0, 1.0],[1.0, 0.0, 0.0, 0.0],[0.0, 1.0, 0.0, 0.0]])
+g2 = matrix([[0j, 0j, 1j, 0j],[0j, (-0+0j), 0j, (-0-1j)],[-1j, 0j, 0j, 0j],[0j, 1j, 0j, (-0+0j)]])
+g3 = matrix([[0j, 0j, 0j, 1j],[0j, 0j, 1j, 0j],[0j, -1j, 0j, 0j],[-1j, 0j, 0j, 0j]])
+g4 = matrix([[-1j, 0j, 0j, 0j],[0j, 1j, 0j, 0j],[0j, 0j, -1j, 0j],[0j, 0j, 0j, 1j]])
+g5 = matrix([[0j, -1j, 0j, 0j],[-1j, 0j, 0j, 0j],[0j, 0j, 0j, -1j],[0j, 0j, -1j, 0j]])
+g6 = matrix([[0j, (1+0j), 0j, 0j],[(-1+0j), 0j, 0j, 0j],[0j, 0j, 0j, (-1+0j)],[0j, 0j, (1+0j), 0j]])
+g7 = matrix([[0j, 0j, 0j, (1+0j)],[0j, 0j, (-1+0j), 0j],[0j, (1+0j), 0j, 0j],[(-1+0j), 0j, 0j, 0j]])
+
+a0 = block(g0, "H0", "Id", 1, 0, "a0")
+a1 = block(g0, "Id", "TH0", 1, 0, "a1")
+b0 = block(g1, "H1", "Id", 1, 0, "b0")
+b1 = block(g1, "Id", "TH1", 1, 0, "b1")
+c0 = block(g2, "H2", "Id", 1, 0, "c0")
+c1 = block(g2, "Id", "TH2", 1, 0, "c1")
+d0 = block(g3, "H3", "Id", 1, 0, "d0")
+d1 = block(g3, "Id", "TH3", 1, 0, "d1")
+e0 = block(g4, "L0", "Id", 1, 1, "e0")
+e1 = block(g4, "Id", "TL0", -1, 1, "e1")
+f0 = block(g5, "L1", "Id", 1, 1, "f0")
+f1 = block(g5, "Id", "TL1", -1, 1, "f1")
+h0 = block(g6, "L2", "Id", 1, 1, "h0")
+h1 = block(g6, "Id", "TL2", -1, 1, "h1")
+i0 = block(g7, "L3", "Id", 1, 1, "i0")
+i1 = block(g7, "Id", "TL3", -1, 1, "i1")
+list1 = [a0, a1, b0, b1, c0, c1, d0, d1, e0, e1, f0, f1, h0, h1, i0, i1]
+"""
+
+
+"""
+# (2,2) geom
+init = ["H[0]", "H[1]", "H[2]", "H[3]", "L[0]", "L[1]", "L[2]", "L[3]"]
+init_mod = ["H0", "H1", "H2", "H3", "L0", "L1", "L2", "L3"]
+
+g0 = matrix([[1.0, 0.0, 0.0, 0.0],[0.0, 1.0, 0.0, 0.0],[0.0, 0.0, -1.0, -0.0],[0.0, 0.0, -0.0, -1.0]])
+g1 = matrix([[0.0, 0.0, 1.0, 0.0],[0.0, 0.0, 0.0, 1.0],[1.0, 0.0, 0.0, 0.0],[0.0, 1.0, 0.0, 0.0]])
+g2 = matrix([[(1+0j), 0j, 0j, 0j],[0j, (-1+0j), 0j, 0j],[0j, 0j, (1+0j), 0j],[0j, 0j, 0j, (-1+0j)]])
+g3 = matrix([[0j, -1j, 0j, 0j],[1j, 0j, 0j, 0j],[0j, 0j, 0j, -1j],[0j, 0j, 1j, 0j]])
+g4 = matrix([[0j, 0j, (-1+0j), 0j],[0j, -0j, 0j, (1-0j)],[(1+0j), 0j, 0j, 0j],[0j, (-1+0j), 0j, -0j]])
+g5 = matrix([[0j, 0j, 0j, 1j],[(-0+0j), 0j, (-0-1j), 0j],[0j, -1j, 0j, 0j],[1j, 0j, (-0+0j), 0j]])
+g6 = matrix([[0j, 1j, 0j, 0j],[1j, 0j, 0j, 0j],[0j, 0j, 0j, -1j],[0j, 0j, -1j, 0j]])
+g7 = matrix([[0j, 0j, 0j, 1j],[0j, 0j, 1j, 0j],[0j, 1j, 0j, 0j],[1j, 0j, 0j, 0j]])
+
+a0 = block(g0, "H0", "Id", 1, 0, "a0")
+a1 = block(g0, "Id", "TH0", 1, 0, "a1")
+b0 = block(g1, "H1", "Id", 1, 0, "b0")
+b1 = block(g1, "Id", "TH1", 1, 0, "b1")
+c0 = block(g2, "H2", "Id", 1, 0, "c0")
+c1 = block(g2, "Id", "TH2", 1, 0, "c1")
+d0 = block(g3, "H3", "Id", 1, 0, "d0")
+d1 = block(g3, "Id", "TH3", 1, 0, "d1")
+e0 = block(g4, "L0", "Id", 1, 1, "e0")
+e1 = block(g4, "Id", "TL0", -1, 1, "e1")
+f0 = block(g5, "L1", "Id", 1, 1, "f0")
+f1 = block(g5, "Id", "TL1", -1, 1, "f1")
+h0 = block(g6, "L2", "Id", 1, 1, "h0")
+h1 = block(g6, "Id", "TL2", -1, 1, "h1")
+i0 = block(g7, "L3", "Id", 1, 1, "i0")
+i1 = block(g7, "Id", "TL3", -1, 1, "i1")
+list1 = [a0, a1, b0, b1, c0, c1, d0, d1, e0, e1, f0, f1, h0, h1, i0, i1]
+"""
+
+"""
+# (3,1) geom
+init = ["H[0]", "H[1]", "H[2]", "H[3]", "H[4]", "H[5]", "L[0]", "L[1]"]
+init_mod = ["H0", "H1", "H2", "H3", "H4", "H5", "L0", "L1"]
+
+g0 = matrix([[1.0, 0.0, 0.0, 0.0],[0.0, 1.0, 0.0, 0.0],[0.0, 0.0, -1.0, -0.0],[0.0, 0.0, -0.0, -1.0]])
+g1 = matrix([[0.0, 0.0, 1.0, 0.0],[0.0, 0.0, 0.0, 1.0],[1.0, 0.0, 0.0, 0.0],[0.0, 1.0, 0.0, 0.0]])
+g2 = matrix([[0j, 0j, 1j, 0j],[0j, (-0+0j), 0j, (-0-1j)],[-1j, 0j, 0j, 0j],[0j, 1j, 0j, (-0+0j)]])
+g3 = matrix([[0j, -1j, 0j, 0j],[1j, 0j, 0j, 0j],[0j, 0j, 0j, -1j],[0j, 0j, 1j, 0j]])
+g4 = matrix([[0j, (1+0j), 0j, 0j],[(1+0j), 0j, 0j, 0j],[0j, 0j, 0j, (-1+0j)],[0j, 0j, (-1+0j), 0j]])
+g5 = matrix([[0j, 0j, 0j, (1+0j)],[0j, 0j, (1+0j), 0j],[0j, (1+0j), 0j, 0j],[(1+0j), 0j, 0j, 0j]])
+g6 = matrix([[0j, 0j, 0j, 1j],[(-0+0j), 0j, (-0-1j), 0j],[0j, -1j, 0j, 0j],[1j, 0j, (-0+0j), 0j]])
+g7 = matrix([[-1j, 0j, 0j, 0j],[0j, 1j, 0j, 0j],[0j, 0j, -1j, 0j],[0j, 0j, 0j, 1j]])
+
+a0 = block(g0, "H0", "Id", 1, 0, "a0")
+a1 = block(g0, "Id", "TH0", 1, 0, "a1")
+b0 = block(g1, "H1", "Id", 1, 0, "b0")
+b1 = block(g1, "Id", "TH1", 1, 0, "b1")
+c0 = block(g2, "H2", "Id", 1, 0, "c0")
+c1 = block(g2, "Id", "TH2", 1, 0, "c1")
+d0 = block(g3, "H3", "Id", 1, 0, "d0")
+d1 = block(g3, "Id", "TH3", 1, 0, "d1")
+e0 = block(g4, "H4", "Id", 1, 0, "e0")
+e1 = block(g4, "Id", "TH4", 1, 0, "e1")
+f0 = block(g5, "H5", "Id", 1, 0, "f0")
+f1 = block(g5, "Id", "TH5", 1, 0, "f1")
+h0 = block(g6, "L0", "Id", 1, 1, "h0")
+h1 = block(g6, "Id", "TL0", -1, 1, "h1")
+i0 = block(g7, "L1", "Id", 1, 1, "i0")
+i1 = block(g7, "Id", "TL1", -1, 1, "i1")
+list1 = [a0, a1, b0, b1, c0, c1, d0, d1, e0, e1, f0, f1, h0, h1, i0, i1]
+"""
+
+
 """
 # (0,1) geom
 init = ["L[0]"]
@@ -759,7 +894,7 @@ a1 = block(g0, "Id", "TH0", 1, 0, "a1")
 list1 = [a0, a1]
 """
 
-"""
+#"""
 #for debug
 #for D4+gD2
 
@@ -782,6 +917,14 @@ print("if(control[4])")
 print("vecS[4] = GSL_REAL(trH1);")
 print("if(control[5])")
 print("vecS[5] = GSL_REAL(trH1H1);")
+print("if(control[6])")
+print("vecS[4] = GSL_REAL(trH2);")
+print("if(control[7])")
+print("vecS[7] = GSL_REAL(trH2H2);")
+print("if(control[8])")
+print("vecS[8] = GSL_REAL(trH3);")
+print("if(control[9])")
+print("vecS[9] = GSL_REAL(trH3H3);")
 print("}")
 
 
@@ -803,11 +946,19 @@ print("if(control[4])")
 print("vecS[4] = GSL_REAL(trH1);")
 print("if(control[5])")
 print("vecS[5] = GSL_REAL(trH1H1);")
+print("if(control[6])")
+print("vecS[4] = GSL_REAL(trH2);")
+print("if(control[7])")
+print("vecS[7] = GSL_REAL(trH2H2);")
+print("if(control[8])")
+print("vecS[8] = GSL_REAL(trH3);")
+print("if(control[9])")
+print("vecS[9] = GSL_REAL(trH3H3);")
 print("}")
 
-"""
-
 #"""
+
+"""
 #for simulation
 #for D8+g6*D6+g4*D4+g2*D2
 
@@ -824,9 +975,22 @@ trD8 = masterchef(D8, init, init_mod, 1)
 
 print("return G2*(" + trD2[0] + ") + G4*(" + trD4[0] + ") + G6*(" + trD6[0] + ") " + trD8[0] + ";")
 print("}")
-#"""
+"""
 
 """
+#for simulation
+#for D4+g2*D2
+
+D4 = dirac_power(list1, 4)
+D2 = dirac_power(list1, 2)
+
+trD2 = masterchef(D2, init, init_mod, 0)
+trD4 = masterchef(D4, init, init_mod, 1)
+
+
+print("return G*(" + trD2[0] + ") " + trD4[0] + ";")
+print("}")
+
 #for D2
 D2 = dirac_power(list1, 2)
 

@@ -7,8 +7,8 @@
 #include "global.h"
 #include "macros.h"
 
-#define STEP_G 0.01
-#define REP_G 10
+#define STEP_G 0.1
+#define REP_G 40
 
 int main()
 {

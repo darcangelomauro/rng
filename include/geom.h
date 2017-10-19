@@ -53,5 +53,34 @@ extern void actionD2t13(double* vecS, int* control);
 extern void actionD4D2t13(double* vecS, int* control);
 #endif
 
+#ifndef GEOM04_C
+extern void geom_check04();
+extern void init_gamma04();
+extern void actionD2t04(double* vecS, int* control);
+extern void actionD4D2t04(double* vecS, int* control);
+#endif
+
+#ifndef GEOM40_C
+extern void geom_check40();
+extern void init_gamma40();
+extern void actionD2t40(double* vecS, int* control);
+extern void actionD4D2t40(double* vecS, int* control);
+#endif
+
+#ifndef GEOM22_C
+extern void geom_check22();
+extern void init_gamma22();
+extern void actionD2t22(double* vecS, int* control);
+extern void actionD4D2t22(double* vecS, int* control);
+#endif
+
+#ifndef GEOM31_C
+extern void geom_check31();
+extern void init_gamma31();
+extern void actionD2t31(double* vecS, int* control);
+extern void actionD4D2t31(double* vecS, int* control);
+#endif
+
+
 
 #endif

@@ -120,4 +120,55 @@
 #define GEOM_CHECK geom_check13
 #endif
 
+#ifdef GEOM04
+#define P_actionD2 actionD2t04
+#define P_actionD4D2 actionD4D2t04
+#define C_actionD2 actionD2t04()
+#define C_actionD4D2 actionD4D2t04()
+
+#define P_gamma init_gamma04
+#define C_gamma init_gamma04()
+
+#define GEOM_CHECK geom_check04
+#endif
+
+#ifdef GEOM40
+#define P_actionD2 actionD2t40
+#define P_actionD4D2 actionD4D2t40
+#define C_actionD2 actionD2t40()
+#define C_actionD4D2 actionD4D2t40()
+
+#define P_gamma init_gamma40
+#define C_gamma init_gamma40()
+
+#define GEOM_CHECK geom_check40
+#endif
+
+#ifdef GEOM22
+#define P_actionD2 actionD2t22
+#define P_actionD4D2 actionD4D2t22
+#define C_actionD2 actionD2t22()
+#define C_actionD4D2 actionD4D2t22()
+
+#define P_gamma init_gamma22
+#define C_gamma init_gamma22()
+
+#define GEOM_CHECK geom_check22
+#endif
+
+#ifdef GEOM31
+#define P_actionD2 actionD2t31
+#define P_actionD4D2 actionD4D2t31
+#define C_actionD2 actionD2t31()
+#define C_actionD4D2 actionD4D2t31()
+
+#define P_gamma init_gamma31
+#define C_gamma init_gamma31()
+
+#define GEOM_CHECK geom_check31
+#endif
+
+
+
+
 #endif

@@ -32,7 +32,7 @@
 
 // GLOBAL VARIABLES ********************************************************
 
-#define GEOM02
+#define GEOM04
 
 EXTERN int dim;
 #ifndef GAP

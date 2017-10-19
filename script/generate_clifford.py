@@ -267,4 +267,43 @@ for item in gamma_prod:
     print("gamma_" + str(item[0]))
     print(item[1])
 
+print("************code***********")
+for matrix in gamma_prod:
+    print("g" + str(gamma_prod.index(matrix)) + " = matrix([", end="")
+    size = int(math.sqrt(matrix[1].size))
+    for i in range(size):
+        print("[", end="")
+        for j in range(size):
+            a = matrix[1][i,j]
+            print(str(a), end="")
+            if j != size-1:
+                print(", ", end="")
+        if i == size-1:
+            print("]", end="")
+        else:
+            print("],", end="")
+    print("])")
+print("*************code2*************")
+nH = 0
+for matrix in gamma_prod:
+    label = ""
+    if matrix[0].find("H") == -1:
+        label = "L"
+    else:
+        label = "H"
+        nH += 1
+    if label == "H":
+        idx = gamma_prod.index(matrix)
+    else:
+        idx = gamma_prod.index(matrix)-nH
+    size = int(math.sqrt(matrix[1].size))
+    print("    // gamma" + label + str(idx))
+    for i in range(size):
+        for j in range(size):
+            a = matrix[1][i,j]
+            if numpy.real(a) != 0 or numpy.imag(a) != 0:
+                print("    gsl_matrix_complex_set(gamma" + label + "[" + str(idx) + "], " + str(i) + ", " + str(j) + ", gsl_complex_rect(" + str(numpy.real(a)) + ", " + str(numpy.imag(a)) + "));")
+    print(" ")
+
+
 

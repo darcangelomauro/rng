@@ -21,7 +21,7 @@ all: rmxeq mkdep mkxeq
 
 MAIN = simulation_main analysis_main histogram_main avgeval_main varsim_main
 
-UTILS = statistics matop update fileop geom01 geom10 geom20 geom02 geom11 geom03 geom13 data dirac 
+UTILS = statistics matop update fileop geom01 geom10 geom20 geom02 geom11 geom03 geom13 geom31 geom22 geom40 geom04 data dirac 
 
 
 MODULES = $(UTILS)
