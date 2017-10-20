@@ -19,7 +19,7 @@ all: rmxeq mkdep mkxeq
 
 # main programs and required modules 
 
-MAIN = simulation_main analysis_main histogram_main avgeval_main varsim_main
+MAIN = simulation_main analysis_main histogram_main avgeval_main varsim_main multicode_analysis_main
 
 UTILS = statistics matop update fileop geom01 geom10 geom20 geom02 geom11 geom03 geom13 geom31 geom22 geom40 geom04 data dirac 
 

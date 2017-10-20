@@ -475,8 +475,8 @@ int move(void Sfunc(double*, int*), int mode, gsl_rng* r)
         if(uM < nH)
         {
             gsl_matrix_complex_memcpy(H[uM], M);
-            tr[uM] = S1[uM+2];
-            tr2[uM] = S1[uM+3];
+            tr[uM] = S1[2*uM+2];
+            tr2[uM] = S1[2*uM+3];
         }
         else if(uM<nHL)
             gsl_matrix_complex_memcpy(L[uM-nH], M);
@@ -503,8 +503,8 @@ int move(void Sfunc(double*, int*), int mode, gsl_rng* r)
             if(uM < nH)
             {
                 gsl_matrix_complex_memcpy(H[uM], M);
-                tr[uM] = S1[uM+2];
-                tr2[uM] = S1[uM+3];
+                tr[uM] = S1[2*uM+2];
+                tr2[uM] = S1[2*uM+3];
             }
             else if(uM<nHL)
                 gsl_matrix_complex_memcpy(L[uM-nH], M);
