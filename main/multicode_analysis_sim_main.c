@@ -4,8 +4,10 @@
 #include <stdlib.h>
 #include <string.h>
 #include <gsl/gsl_statistics.h>
+#include <gsl/gsl_blas.h>
 #include <math.h>
 #include <fileop.h>
+#include <matop.h>
 #include <global.h>
 
 int main(int argc, char** argv)
@@ -16,7 +18,7 @@ int main(int argc, char** argv)
         exit(EXIT_FAILURE);
     }
 
-    FILE* fres = fopen("out.txt", "w");
+    FILE* fres = fopen("out_sim.txt", "w");
     if(fres == NULL)
     {
         printf("Error: unable to open output file\n");
@@ -28,9 +30,9 @@ int main(int argc, char** argv)
         // avoid overwriting previous analysis
         char* data = alloc_coded_filename("data", argv[i+1]);
         FILE* fdata = fopen(data, "r");
-        char* simS = alloc_coded_filename("simS", argv[i+1]);
-        FILE* fsimS = fopen(simS, "r");
-        if(fdata == NULL || fsimS == NULL)
+        char* simHL = alloc_coded_filename("simHL", argv[i+1]);
+        FILE* fsimHL = fopen(simHL, "r");
+        if(fdata == NULL || fsimHL == NULL)
         {
             printf("Error: unable to read input file %s\n", argv[i+1]);
             exit(EXIT_FAILURE);
@@ -64,11 +66,9 @@ int main(int argc, char** argv)
         }
 
 
-        double* S;
         double** tr;
         double** tr2;
         int nmeas = Nsw_ / GAP_;
-        S = calloc(nmeas, sizeof(double));
         tr = malloc(nH_*sizeof(double*));
         tr2 = malloc(nH_*sizeof(double*));
         for(int j=0; j<nH_; j++)
@@ -79,30 +79,78 @@ int main(int argc, char** argv)
 
         for(int j=0; j<nmeas; j++)
         {
-            int r;
-            r = fscanf(fsimS, "%lf", &S[j]);
-            if(r==0)
-            {
-                printf("Error: not able to read action\n");
-                exit(EXIT_FAILURE);
-            }
-
+            gsl_matrix_complex** H_ = malloc(nH_*sizeof(gsl_matrix_complex*));
+            gsl_matrix_complex** H2_ = malloc(nH_*sizeof(gsl_matrix_complex*));
+            gsl_matrix_complex** L_ = malloc(nL_*sizeof(gsl_matrix_complex*));
+            for(int k=0; k<nH_; k++)
+                H_[k] = gsl_matrix_complex_calloc(dim_, dim_);
+            for(int k=0; k<nL_; k++)
+                L_[k] = gsl_matrix_complex_calloc(dim_, dim_);
+            
+            
             int r1 = 0;
             for(int k=0; k<nH_; k++)
             {
-                r1 += fscanf(fsimS, "%lf", &tr[k][j]);
-                r1 += fscanf(fsimS, "%lf", &tr2[k][j]);
+                for(int l=0; l<dim_; l++)
+                {
+                    for(int m=0; m<dim_; m++)
+                    {
+                        double re = 0.;
+                        double im = 0.;
+                        r1 += fscanf(fsimHL, "%lf", &re);
+                        r1 += fscanf(fsimHL, "%lf", &im);
+                        gsl_matrix_complex_set(H_[k], l, m, gsl_complex_rect(re, im));
+                    }
+                }
             }
-            if(r1 != 2*nH_)
+            for(int k=0; k<nL_; k++)
             {
-                printf("Error: not enough data in %s\n", data);
+                for(int l=0; l<dim_; l++)
+                {
+                    for(int m=0; m<dim_; m++)
+                    {
+                        double re = 0.;
+                        double im = 0.;
+                        r1 += fscanf(fsimHL, "%lf", &re);
+                        r1 += fscanf(fsimHL, "%lf", &im);
+                        gsl_matrix_complex_set(L_[k], l, m, gsl_complex_rect(re, im));
+                    }
+                }
+            }
+            if(r1 != (nH_+nL_)*dim_*dim_*2)
+            {
+                printf("Error: not enough data in %s\n", simHL);
                 exit(EXIT_FAILURE);
             }
+            
+            for(int k=0; k<nH_; k++)
+            {
+                H2_[k] = gsl_matrix_complex_calloc(dim_, dim_);
+                gsl_blas_zhemm(CblasLeft, CblasUpper, GSL_COMPLEX_ONE, H_[k], H_[k], GSL_COMPLEX_ZERO, H2_[k]);
+            }
+
+
+            for(int k=0; k<nH_; k++)
+            {
+                tr[k][j] = trace_herm(H_[k]);
+                tr2[k][j] = trace_herm(H2_[k]);
+            }
+
+
+            
+            // freeing memory
+            for(int k=0; k<nH_; k++)
+                gsl_matrix_complex_free(H_[k]);
+            for(int k=0; k<nH_; k++)
+                gsl_matrix_complex_free(H2_[k]);
+            for(int k=0; k<nL_; k++)
+                gsl_matrix_complex_free(L_[k]);
+            free(H_);
+            free(H2_);
+            free(L_);
         }
 
-        double meanS = gsl_stats_mean(S, 1, nmeas);
-        double varS = gsl_stats_variance(S, 1, nmeas);
-        fprintf(fres, "%lf %lf %lf ", G_, meanS, sqrt(varS/(double)nmeas));
+        fprintf(fres, "%lf ", G_);
         for(int j=0; j<nH_; j++)
         {
             double meantr = gsl_stats_mean(tr[j], 1, nmeas);
@@ -113,7 +161,9 @@ int main(int argc, char** argv)
         }
         fprintf(fres, "\n");
 
-        free(S);
+
+        
+        // freeing memory
         for(int j=0; j<nH_; j++)
         {
             free(tr[j]);
@@ -123,8 +173,8 @@ int main(int argc, char** argv)
         free(tr2);
         free(data);
         fclose(fdata);
-        free(simS);
-        fclose(fsimS);
+        free(simHL);
+        fclose(fsimHL);
     }
 
     fclose(fres);

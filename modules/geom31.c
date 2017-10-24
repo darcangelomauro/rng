@@ -143,7 +143,7 @@ void actionD2t31(double* vecS, int* control)
     if(control[5])
     vecS[5] = GSL_REAL(trH1H1);
     if(control[6])
-    vecS[4] = GSL_REAL(trH2);
+    vecS[6] = GSL_REAL(trH2);
     if(control[7])
     vecS[7] = GSL_REAL(trH2H2);
     if(control[8])
@@ -1516,7 +1516,7 @@ void actionD4D2t31(double* vecS, int* control)
     if(control[5])
     vecS[5] = GSL_REAL(trH1H1);
     if(control[6])
-    vecS[4] = GSL_REAL(trH2);
+    vecS[6] = GSL_REAL(trH2);
     if(control[7])
     vecS[7] = GSL_REAL(trH2H2);
     if(control[8])

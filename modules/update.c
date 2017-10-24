@@ -437,8 +437,8 @@ int move(void Sfunc(double*, int*), int mode, gsl_rng* r)
     {
         // generate displacement dH
         generate_HL(M, 0, dim, r);    //M is now the proposed displacement from H[uM]
-        control[uM+2] = 1;
-        control[uM+3] = 1;
+        control[2*uM+2] = 1;
+        control[2*uM+3] = 1;
 
         // compute displaced matrix
         gsl_matrix_complex_add(M, H[uM]);             //now M = H[uM] + displacement
