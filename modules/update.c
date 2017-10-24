@@ -602,7 +602,7 @@ void SCALE_autotune(double minTarget, double maxTarget, void Sfunc(double*, int*
 // the thermalization part outputs two files "thermalizationX.txt" (where X is 1 or 2) with the action value
 // the simulation part outputs a file "simulation.txt" with the action and the H and L matrices
 // returns acceptance rate
-double simulation(void Sfunc(double*, int*), int mode, void init_gamma(), gsl_rng* r)
+char* simulation(void Sfunc(double*, int*), int mode, void init_gamma(), gsl_rng* r)
 {
     init_data();
     
@@ -627,7 +627,6 @@ double simulation(void Sfunc(double*, int*), int mode, void init_gamma(), gsl_rn
     FILE* fsimS = fopen(name_simS, "w");
     FILE* fsimHL = fopen(name_simHL, "w");
 
-    free(code);
     free(name_data);
     free(name_therm1);
     free(name_therm2);
@@ -678,8 +677,126 @@ double simulation(void Sfunc(double*, int*), int mode, void init_gamma(), gsl_rn
     fclose(fdata);
     simulation_free();
 
-    return ar/(double)Nsw;
+    printf("acceptance rate: %lf\n", ar/(double)Nsw);
+
+    return code;
 }
+
+
+// simulation routine for varying over matrix dimension and coupling constant G in a convenient way.
+// for each matrix dimension generates a unique code XXXXX and three files:
+// file "XXXXX_varG_data.txt": collects data on the range in which G varies, and total duration of the simulation
+// file "XXXXX_varG_args.txt": collects list of codes needed to run multicode_analysis_main
+// file "XXXXX_varG_G_args.txt": shows correspondence between G and code
+// 
+void multicode_wrapper(void Sfunc(double*, int*), void init_gamma(), double INCR_G, int REP_G, double INCR_dim, int REP_dim, gsl_rng* r)
+{
+    // cycle over matrix dimension
+    for(int j=0; j<REP_dim; j++)
+    {
+        // copy init.txt
+        FILE* finit = fopen("init.txt", "r");
+        if(finit == NULL)
+        {
+            printf("Error: input.txt not found\n");
+            exit(EXIT_FAILURE);
+        }
+        int narg;
+        int dim_, nH_, nL_, Ntherm_, Nsw_;
+        double SCALE_, G_;
+        // initialize matrix dimension
+        narg = fscanf(finit, "%d", &dim_);
+        // initialize #H matrices
+        narg += fscanf(finit, "%d", &nH_);
+        // initialize #L matrices
+        narg += fscanf(finit, "%d", &nL_);
+        // initialize SCALE
+        narg += fscanf(finit, "%lf", &SCALE_);
+        // initialize coupling constant
+        narg += fscanf(finit, "%lf", &G_);
+        // initialize number of thermalization sweeps
+        narg += fscanf(finit, "%d", &Ntherm_);
+        // initialize number of simulation sweeps
+        narg += fscanf(finit, "%d", &Nsw_);
+        if(narg < 7)
+        {
+            printf("Error: not enough data in init.txt\n");
+            exit(EXIT_FAILURE);
+        }
+        fclose(finit);
+
+
+        // generate code for varG simulation
+        char* varG_code = generate_code(5, r);
+        // generate output files
+        char* name_varG_data = alloc_coded_filename("varG_data", code);
+        char* name_varG_args = alloc_coded_filename("varG_args", code);
+        char* name_varG_G_args = alloc_coded_filename("varG_G_args", code);
+        FILE* fvarG_data = fopen(name_varG_data, "w");
+        FILE* fvarG_args = fopen(name_varG_args, "w");
+        FILE* fvarG_G_args = fopen(name_varG_G_args, "w");
+        
+        // prompt some shenenigans
+        printf("*********\n");
+        printf("Starting variable G simulation with data:\n");
+        printf("%d values of G uniformly distributed in range [%lf, %lf)\n", REP_G, G, (G + REP_G*INCR_G));
+        printf("Codename: %s\n", varG_code);
+        printf("*********\n");
+
+        // write same shenenigans
+        fprintf(fvarG_data, "REP_G: %d", REP_G);
+        fprintf(fvarG_data, "INCR_G: %d", INCR_G);
+        fprintf(fvarG_data, "G initial: %lf\n", G);
+        fprintf(fvarG_data, "G final: %lf\n", (G + REP_G*INCR_G));
+        fprintf(fvarG_data, "dim: %d\n", dim_);
+
+        // simulate with variable G
+        print_time(fvarG_data, "start simulation:");
+        for(int i=0; i<REP_G; i++)
+        {
+            char* code = simulation(Sfunc, 0, init_gamma, r);
+            fprintf(fvarG_args, "%s ", code);
+            fprintf(fvarG_G_args, "%lf %s\n", G, code);
+            printf("dim: %d,    G: %lf\n", dim, G);
+            G += INCR_G;
+            overwrite_init_file();
+            free(code);
+        }
+        print_time(fvarG_data, "end simulation:");
+
+        // free memory
+        free(varG_code);
+        free(name_varG_data);
+        free(name_varG_args);
+        free(name_varG_G_args);
+        fclose(fvarG_data);
+        fclose(fvarG_args);
+        fclose(fvarG_G_args);
+
+
+        // restore init.txt, but update matrix dimension
+        FILE* finit2 = fopen("init.txt", "w");
+        if(finit2 == NULL)
+        {
+            printf("Error: unable to write on init.txt\n");
+            exit(EXIT_FAILURE);
+        }
+        fprint(finit2, "%d\n", dim_+INCR_dim);
+        fprint(finit2, "%d\n", nH_);
+        fprint(finit2, "%d\n", nL_);
+        fprint(finit2, "%lf\n", SCALE_);
+        fprint(finit2, "%lf\n", G_);
+        fprint(finit2, "%d\n", Ntherm_);
+        fprint(finit2, "%d\n", Nsw_);
+        fclose(finit2);
+    }
+}
+
+
+
+
+
+
 
 void analysis(char* code, int* control, void init_gamma())
 {
