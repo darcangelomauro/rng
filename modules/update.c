@@ -689,7 +689,7 @@ char* simulation(void Sfunc(double*, int*), int mode, void init_gamma(), gsl_rng
 // file "XXXXX_varG_args.txt": collects list of codes needed to run multicode_analysis_main
 // file "XXXXX_varG_G_args.txt": shows correspondence between G and code
 // 
-void multicode_wrapper(void Sfunc(double*, int*), void init_gamma(), double INCR_G, int REP_G, double INCR_dim, int REP_dim, gsl_rng* r)
+void multicode_wrapper(void Sfunc(double*, int*), void init_gamma(), double INCR_G, int REP_G, int INCR_dim, int REP_dim, gsl_rng* r)
 {
     // cycle over matrix dimension
     for(int j=0; j<REP_dim; j++)
@@ -729,9 +729,9 @@ void multicode_wrapper(void Sfunc(double*, int*), void init_gamma(), double INCR
         // generate code for varG simulation
         char* varG_code = generate_code(5, r);
         // generate output files
-        char* name_varG_data = alloc_coded_filename("varG_data", code);
-        char* name_varG_args = alloc_coded_filename("varG_args", code);
-        char* name_varG_G_args = alloc_coded_filename("varG_G_args", code);
+        char* name_varG_data = alloc_coded_filename("varG_data", varG_code);
+        char* name_varG_args = alloc_coded_filename("varG_args", varG_code);
+        char* name_varG_G_args = alloc_coded_filename("varG_G_args", varG_code);
         FILE* fvarG_data = fopen(name_varG_data, "w");
         FILE* fvarG_args = fopen(name_varG_args, "w");
         FILE* fvarG_G_args = fopen(name_varG_G_args, "w");
@@ -739,15 +739,16 @@ void multicode_wrapper(void Sfunc(double*, int*), void init_gamma(), double INCR
         // prompt some shenenigans
         printf("*********\n");
         printf("Starting variable G simulation with data:\n");
-        printf("%d values of G uniformly distributed in range [%lf, %lf)\n", REP_G, G, (G + REP_G*INCR_G));
+        printf("%d values of G uniformly distributed in range [%lf, %lf]\n", REP_G, G_, (G_ + (REP_G-1)*INCR_G));
+        printf("dim: %d\n", dim_);
         printf("Codename: %s\n", varG_code);
         printf("*********\n");
 
         // write same shenenigans
-        fprintf(fvarG_data, "REP_G: %d", REP_G);
-        fprintf(fvarG_data, "INCR_G: %d", INCR_G);
-        fprintf(fvarG_data, "G initial: %lf\n", G);
-        fprintf(fvarG_data, "G final: %lf\n", (G + REP_G*INCR_G));
+        fprintf(fvarG_data, "REP_G: %d\n", REP_G);
+        fprintf(fvarG_data, "INCR_G: %lf\n", INCR_G);
+        fprintf(fvarG_data, "G initial: %lf\n", G_);
+        fprintf(fvarG_data, "G final: %lf\n", (G_ + (REP_G-1)*INCR_G));
         fprintf(fvarG_data, "dim: %d\n", dim_);
 
         // simulate with variable G
@@ -781,13 +782,13 @@ void multicode_wrapper(void Sfunc(double*, int*), void init_gamma(), double INCR
             printf("Error: unable to write on init.txt\n");
             exit(EXIT_FAILURE);
         }
-        fprint(finit2, "%d\n", dim_+INCR_dim);
-        fprint(finit2, "%d\n", nH_);
-        fprint(finit2, "%d\n", nL_);
-        fprint(finit2, "%lf\n", SCALE_);
-        fprint(finit2, "%lf\n", G_);
-        fprint(finit2, "%d\n", Ntherm_);
-        fprint(finit2, "%d\n", Nsw_);
+        fprintf(finit2, "%d\n", dim_+INCR_dim);
+        fprintf(finit2, "%d\n", nH_);
+        fprintf(finit2, "%d\n", nL_);
+        fprintf(finit2, "%lf\n", SCALE_);
+        fprintf(finit2, "%lf\n", G_);
+        fprintf(finit2, "%d\n", Ntherm_);
+        fprintf(finit2, "%d\n", Nsw_);
         fclose(finit2);
     }
 }

@@ -21,6 +21,7 @@ extern int move(void Sfunc(double*, int*), int mode, gsl_rng* r);
 extern double sweep(void Sfunc(double*, int*), int mode, gsl_rng* r);
 extern void SCALE_autotune(double minTarget, double maxTarget, void Sfunc(double*, int*), gsl_rng* r);
 extern char* simulation(void Sfunc(double*, int*), int mode, void init_gamma(), gsl_rng* r);
+extern void multicode_wrapper(void Sfunc(double*, int*), void init_gamma(), double INCR_G, int REP_G, int INCR_dim, int REP_dim, gsl_rng* r);
 extern void analysis(char* code, int* control, void init_gamma());
 extern void hermitization();
 #endif

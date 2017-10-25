@@ -17,10 +17,8 @@ int main()
     gsl_rng_set(r, time(NULL));
     
     // simulation
-    double ar = simulation(P_actionD2, 0, P_gamma, r);
+    simulation(P_actionD2, 0, P_gamma, r);
     
     // free random number generator
     gsl_rng_free(r);
-
-    printf("acceptance rate: %lf\n", ar);
 }
