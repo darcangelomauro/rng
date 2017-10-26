@@ -7,6 +7,12 @@ devel/action_consistency/*
 !devel/action_consistency/*.c
 !devel/action_consistency/Makefile
 
+# ignore everything
+devel/matop_test/*
+
+# unignore .c and Makefile
+!devel/matop_test/*.c
+!devel/matop_test/Makefile
 
 
 

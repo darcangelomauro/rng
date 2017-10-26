@@ -602,7 +602,7 @@ void SCALE_autotune(double minTarget, double maxTarget, void Sfunc(double*, int*
 // the thermalization part outputs two files "thermalizationX.txt" (where X is 1 or 2) with the action value
 // the simulation part outputs a file "simulation.txt" with the action and the H and L matrices
 // returns acceptance rate
-char* simulation(void Sfunc(double*, int*), int mode, void init_gamma(), gsl_rng* r)
+char* simulation(void Sfunc(double*, int*), int mode, int renorm, void init_gamma(), gsl_rng* r)
 {
     init_data();
     
@@ -620,18 +620,29 @@ char* simulation(void Sfunc(double*, int*), int mode, void init_gamma(), gsl_rng
     char* name_therm2 = alloc_coded_filename("therm2", code);
     char* name_simS = alloc_coded_filename("simS", code);
     char* name_simHL = alloc_coded_filename("simHL", code);
+    char* name_simS_r = alloc_coded_filename("simS_r", code);
+    char* name_simHL_r = alloc_coded_filename("simHL_r", code);
 
     FILE* fdata = fopen(name_data, "w");
     FILE* ftherm1 = fopen(name_therm1, "w");
     FILE* ftherm2 = fopen(name_therm2, "w");
     FILE* fsimS = fopen(name_simS, "w");
     FILE* fsimHL = fopen(name_simHL, "w");
+    FILE* fsimS_r;
+    FILE* fsimHL_r;
+    if(renorm)
+    {
+        fsimS_r = fopen(name_simS_r, "w");
+        fsimHL_r = fopen(name_simHL_r, "w");
+    }
 
     free(name_data);
     free(name_therm1);
     free(name_therm2);
     free(name_simS);
     free(name_simHL);
+    free(name_simS_r);
+    free(name_simHL_r);
 
     // print simulation data
     print_data(fdata);
@@ -667,13 +678,22 @@ char* simulation(void Sfunc(double*, int*), int mode, void init_gamma(), gsl_rng
     {
         ar += sweep(Sfunc, mode, r);
         if(measurement(i, GAP))
+        {
             print_simulation(fsimS, fsimHL);
+            if(renorm)
+                apply_renormalization(2, fsimS_r, fsimHL_r);
+        }
     }
     print_time(fdata, "end simulation:");
     fprintf(fdata, "acceptance rate: %lf", ar/(double)Nsw);
 
     fclose(fsimS);
     fclose(fsimHL);
+    if(renorm)
+    {
+        fclose(fsimS_r);
+        fclose(fsimHL_r);
+    }
     fclose(fdata);
     simulation_free();
 
@@ -689,7 +709,7 @@ char* simulation(void Sfunc(double*, int*), int mode, void init_gamma(), gsl_rng
 // file "XXXXX_varG_args.txt": collects list of codes needed to run multicode_analysis_main
 // file "XXXXX_varG_G_args.txt": shows correspondence between G and code
 // 
-void multicode_wrapper(void Sfunc(double*, int*), void init_gamma(), double INCR_G, int REP_G, int INCR_dim, int REP_dim, gsl_rng* r)
+void multicode_wrapper(void Sfunc(double*, int*), void init_gamma(), int renorm, double INCR_G, int REP_G, int INCR_dim, int REP_dim, gsl_rng* r)
 {
     // cycle over matrix dimension
     for(int j=0; j<REP_dim; j++)
@@ -755,7 +775,7 @@ void multicode_wrapper(void Sfunc(double*, int*), void init_gamma(), double INCR
         print_time(fvarG_data, "start simulation:");
         for(int i=0; i<REP_G; i++)
         {
-            char* code = simulation(Sfunc, 0, init_gamma, r);
+            char* code = simulation(Sfunc, 0, renorm, init_gamma, r);
             fprintf(fvarG_args, "%s ", code);
             fprintf(fvarG_G_args, "%lf %s\n", G, code);
             printf("dim: %d,    G: %lf\n", dim, G);
