@@ -24,4 +24,5 @@ extern char* simulation(void Sfunc(double*, int*), int mode, void init_gamma(), 
 extern void multicode_wrapper(void Sfunc(double*, int*), void init_gamma(), double INCR_G, int REP_G, int INCR_dim, int REP_dim, gsl_rng* r);
 extern void analysis(char* code, int* control, void init_gamma());
 extern void hermitization();
+extern void apply_renormalization(int b, FILE* fobsS, FILE* fobsHL);
 #endif

@@ -723,3 +723,55 @@ void make_hermitian(gsl_matrix_complex* a)
 
 
 
+// very inefficient.
+// rewrite by filling just half of the matrix
+// and possibly with the explicit assignement in the data[] attribute of gsl_matrix_complex
+void renormalize(gsl_matrix_complex* A, gsl_matrix_complex* B)
+{
+    // A is the source matrix, B is the target matrix
+
+    // check dimB = dimA/b for some integer b>1
+    int m = A->size1;
+    int n = B->size1;
+    if(m != A->size2 || n != B->size2)
+    {
+        printf("Error: can only renormalize square matrices\n");
+        exit(EXIT_FAILURE);
+    }
+
+    int b = m/n;
+    if( b != (double)m/(double)n)
+    {
+        printf("Error: cannot renormalize\n");
+        exit(EXIT_FAILURE);
+    }
+
+    for(int i=0; i<n; i++)
+    {
+        for(int j=0; j<n; j++)
+        {
+            // diagonal block
+            if(i == j)
+            {
+                double z = 0.;
+                for(int k=0; k<b; k++)
+                    z += GSL_REAL(gsl_matrix_complex_get(A, i*b+k, i*b+k));
+                gsl_matrix_complex_set(B, i, i, gsl_complex_rect(z/(double)b, 0.));
+            }
+            
+            // non diagonal block
+            else
+            {
+                gsl_complex z = GSL_COMPLEX_ZERO;
+                for(int l=0; l<b; l++)
+                {
+                    for(int k=0; k<b; k++)
+                        z = gsl_complex_add(z, gsl_matrix_complex_get(A, i*b+l, j*b+k));
+                }
+
+                gsl_matrix_complex_set(B, i, j, gsl_complex_div_real(z, (double)(b*b)));
+            }
+        }
+    }
+}
+

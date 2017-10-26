@@ -6,6 +6,7 @@
 #include <gsl/gsl_complex.h>
 #include <gsl/gsl_complex_math.h>
 #include <gsl/gsl_matrix_complex_double.h>
+#include <gsl/gsl_blas.h>
 #include "matop.h"
 #include "global.h"
 
@@ -95,3 +96,50 @@ void print_simulation(FILE* fobsS, FILE* fobsHL)
         fprintf(fobsHL, "\n");
     }
 }
+
+void print_renormalized(FILE* fobsS, FILE* fobsHL, gsl_matrix_complex** H_r, gsl_matrix_complex** L_r, int dim_r)
+{
+    // print H matrices
+    for(int l=0; l<nH; l++)
+    {
+        for(int i=0; i<dim_r; i++)
+        {
+            for(int j=0; j<dim_r; j++)
+            {
+                gsl_complex z = gsl_matrix_complex_get(H_r[l], i, j);
+                fprintf(fobsHL, "%.15lf ", GSL_REAL(z)); 
+                fprintf(fobsHL, "%.15lf ", GSL_IMAG(z));
+            }
+        }
+        fprintf(fobsHL, "\n");
+    }
+
+    // print L matrices
+    for(int l=0; l<nL; l++)
+    {
+        for(int i=0; i<dim_r; i++)
+        {
+            for(int j=0; j<dim_r; j++)
+            {
+                gsl_complex z = gsl_matrix_complex_get(L_r[l], i, j);
+                fprintf(fobsHL, "%.15lf ", GSL_REAL(z)); 
+                fprintf(fobsHL, "%.15lf ", GSL_IMAG(z));
+            }
+        }
+        fprintf(fobsHL, "\n");
+    }
+
+
+    // compute squares
+    for(int i=0; i<nH; i++)
+    {
+        gsl_matrix_complex* H2_r = gsl_matrix_complex_alloc(dim_r, dim_r);
+        gsl_blas_zhemm(CblasLeft, CblasUpper, GSL_COMPLEX_ONE, H_r[i], H_r[i], GSL_COMPLEX_ZERO, H2_r);
+        double tr_r = trace_herm(H_r[i]);
+        double tr2_r = trace_herm(H2_r);
+        fprintf(fobsS, "%lf %lf ", tr_r, tr2_r);
+        gsl_matrix_complex_free(H2_r);
+    }
+    fprintf(fobsS, "\n");
+}
+    

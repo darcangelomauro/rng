@@ -799,6 +799,7 @@ void multicode_wrapper(void Sfunc(double*, int*), void init_gamma(), double INCR
 
 
 
+
 void analysis(char* code, int* control, void init_gamma())
 {
     /*
@@ -995,4 +996,47 @@ void hermitization()
     for(int i=0; i<nL; i++)
         make_hermitian(L[i]);
 }
+
+
+// the matrices get scaled by dim/b preserving hermitian behaviour
+void apply_renormalization(int b, FILE* fobsS, FILE* fobsHL)
+{
+    if((double)dim/(double)b != dim/b)
+    {
+        printf("Error: dim is not a multiple of b\n");
+        exit(EXIT_FAILURE);
+    }
+
+    int dim_r = dim/b;
+
+    gsl_matrix_complex** H_r = malloc(nH*sizeof(gsl_matrix_complex*));
+    gsl_matrix_complex** L_r = malloc(nL*sizeof(gsl_matrix_complex*));
+
+    // build blocked matrices
+    for(int i=0; i<nH; i++)
+    {
+        H_r[i] = gsl_matrix_complex_alloc(dim_r, dim_r);
+        renormalize(H[i], H_r[i]);
+    }
+    for(int i=0; i<nL; i++)
+    {
+        L_r[i] = gsl_matrix_complex_alloc(dim_r, dim_r);
+        renormalize(L[i], L_r[i]);
+    }
+
+    // print on file
+    print_renormalized(fobsS, fobsHL, H_r, L_r, dim_r);
+
+
+
+    // free memory
+    for(int i=0; i<nH; i++)
+        gsl_matrix_complex_free(H_r[i]);
+    for(int i=0; i<nL; i++)
+        gsl_matrix_complex_free(L_r[i]);
+    free(H_r);
+    free(L_r);
+}
+
+
 

@@ -21,7 +21,7 @@ all: rmxeq mkdep mkxeq
 
 MAIN = action_consistency
 
-UTILS = statistics matop update fileop geom01 geom10 geom20 geom02 geom11 geom03 geom13 data dirac 
+UTILS = statistics matop update fileop geom01 geom10 geom20 geom02 geom11 geom03 geom13 geom31 geom22 geom40 geom04 data dirac 
 
 
 MODULES = $(UTILS)
@@ -29,21 +29,21 @@ MODULES = $(UTILS)
 
 # search path for modules
 
-MDIR = ../../modules
+MDIR = ../modules
 
 VPATH = $(MDIR)
 
 
 # additional include directories
 
-INCPATH = ../../include
+INCPATH = ../include /home/pmxmd10/gsl/include
 
 
 # additional libraries to be included 
  
 LIBS = m gsl openblas
 
-LIBPATH =
+LIBPATH = /home/pmxmd10/gsl/lib
 
 
 # scheduling and optimization options (such as -DSSE -DSSE2 -DP4)

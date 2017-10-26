@@ -35,4 +35,5 @@ extern void second_term(gsl_matrix_complex* m, gsl_matrix_complex* c);
 extern void first_term_add(gsl_matrix_complex* m, gsl_matrix_complex* c, int mode);
 extern void second_term_add(gsl_matrix_complex* m, gsl_matrix_complex* c, int mode);
 extern void make_hermitian(gsl_matrix_complex* a);
+extern void renormalize(gsl_matrix_complex* A, gsl_matrix_complex* B);
 #endif
