@@ -760,16 +760,15 @@ void renormalize(gsl_matrix_complex* A, gsl_matrix_complex* B)
             }
             
             // non diagonal block
-            else
+            else if(j>i)
             {
                 gsl_complex z = GSL_COMPLEX_ZERO;
-                for(int l=0; l<b; l++)
-                {
-                    for(int k=0; k<b; k++)
-                        z = gsl_complex_add(z, gsl_matrix_complex_get(A, i*b+l, j*b+k));
-                }
+                for(int k=0; k<b; k++)
+                    z = gsl_complex_add(z, gsl_matrix_complex_get(A, i*b+k, j*b+k));
 
-                gsl_matrix_complex_set(B, i, j, gsl_complex_div_real(z, (double)(b*b)));
+                z = gsl_complex_div_real(z, (double)b);
+                gsl_matrix_complex_set(B, i, j, z);
+                gsl_matrix_complex_set(B, j, i, gsl_complex_conjugate(z));
             }
         }
     }

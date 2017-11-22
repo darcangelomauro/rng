@@ -5,8 +5,11 @@
 #include <string.h>
 #include <gsl/gsl_statistics.h>
 #include <math.h>
-#include <fileop.h>
-#include <global.h>
+#include "fileop.h"
+#include "statistics.h"
+#include "global.h"
+
+#define DIMBIN 1000
 
 int main(int argc, char** argv)
 {
@@ -16,7 +19,7 @@ int main(int argc, char** argv)
         exit(EXIT_FAILURE);
     }
 
-    FILE* fres = fopen("out.txt", "w");
+    FILE* fres = fopen("out_pq20_dim10_1e7_2.txt", "w");
     if(fres == NULL)
     {
         printf("Error: unable to open output file\n");
@@ -65,12 +68,22 @@ int main(int argc, char** argv)
 
 
         double* S;
+        double* bin_S;
+        double* obs;
+        double* bin_obs;
         double** tr;
+        double** bin_tr;
         double** tr2;
+        double** bin_tr2;
         int nmeas = Nsw_ / GAP_;
+        int dimbin = DIMBIN;
+        int nbin = binned_size(nmeas, dimbin);
         S = calloc(nmeas, sizeof(double));
+        obs = calloc(nmeas, sizeof(double));
         tr = malloc(nH_*sizeof(double*));
         tr2 = malloc(nH_*sizeof(double*));
+        bin_tr = malloc(nH_*sizeof(double*));
+        bin_tr2 = malloc(nH_*sizeof(double*));
         for(int j=0; j<nH_; j++)
         {
             tr[j] = calloc(nmeas, sizeof(double));
@@ -88,39 +101,62 @@ int main(int argc, char** argv)
             }
 
             int r1 = 0;
+            double norm = 0;
             for(int k=0; k<nH_; k++)
             {
                 r1 += fscanf(fsimS, "%lf", &tr[k][j]);
                 r1 += fscanf(fsimS, "%lf", &tr2[k][j]);
+                obs[j] += tr[k][j]*tr[k][j];
+                norm += tr2[k][j];
             }
+            //obs[j] /= dim_*norm;
             if(r1 != 2*nH_)
             {
                 printf("Error: not enough data in %s\n", data);
                 exit(EXIT_FAILURE);
             }
+            
+
         }
 
-        double meanS = gsl_stats_mean(S, 1, nmeas);
-        double varS = gsl_stats_variance(S, 1, nmeas);
-        fprintf(fres, "%lf %lf %lf ", G_, meanS, sqrt(varS/(double)nmeas));
+        bin_S = binned_vector(S, nmeas, dimbin);
+        bin_obs = binned_vector(obs, nmeas, dimbin);
         for(int j=0; j<nH_; j++)
         {
-            double meantr = gsl_stats_mean(tr[j], 1, nmeas);
-            double vartr = gsl_stats_variance(tr[j], 1, nmeas);
-            double meantr2 = gsl_stats_mean(tr2[j], 1, nmeas);
-            double vartr2 = gsl_stats_variance(tr2[j], 1, nmeas);
-            fprintf(fres, "%lf %lf %lf %lf ", meantr, sqrt(vartr/(double)nmeas), meantr2, sqrt(vartr2/(double)nmeas));
+            bin_tr[j] = binned_vector(tr[j], nmeas, dimbin);
+            bin_tr2[j] = binned_vector(tr2[j], nmeas, dimbin);
+        }
+
+        double meanS = gsl_stats_mean(bin_S, 1, nbin);
+        double varS = gsl_stats_variance(bin_S, 1, nbin);
+        double meanobs = gsl_stats_mean(bin_obs, 1, nbin);
+        double varobs = gsl_stats_variance(bin_obs, 1, nbin);
+        fprintf(fres, "%lf %lf %lf %lf %lf ", G_, meanS, sqrt(varS/(double)nbin), meanobs, sqrt(varobs/(double)nbin));
+        for(int j=0; j<nH_; j++)
+        {
+            double meantr = gsl_stats_mean(bin_tr[j], 1, nbin);
+            double vartr = gsl_stats_variance(bin_tr[j], 1, nbin);
+            double meantr2 = gsl_stats_mean(bin_tr2[j], 1, nbin);
+            double vartr2 = gsl_stats_variance(bin_tr2[j], 1, nbin);
+            fprintf(fres, "%lf %lf %lf %lf ", meantr, sqrt(vartr/(double)nbin), meantr2, sqrt(vartr2/(double)nbin));
         }
         fprintf(fres, "\n");
 
         free(S);
+        free(obs);
+        free(bin_S);
+        free(bin_obs);
         for(int j=0; j<nH_; j++)
         {
             free(tr[j]);
             free(tr2[j]);
+            free(bin_tr[j]);
+            free(bin_tr2[j]);
         }
         free(tr);
         free(tr2);
+        free(bin_tr);
+        free(bin_tr2);
         free(data);
         fclose(fdata);
         free(simS);

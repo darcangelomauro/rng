@@ -15,12 +15,12 @@ int main()
     gsl_matrix_complex_set(A, 0, 0, gsl_complex_rect(1., 0.));
     gsl_matrix_complex_set(A, 0, 1, gsl_complex_rect(23423423432., 234324324.));
     gsl_matrix_complex_set(A, 0, 2, gsl_complex_rect(3., 2.));
-    gsl_matrix_complex_set(A, 0, 3, gsl_complex_rect(4., 4.));
+    gsl_matrix_complex_set(A, 0, 3, gsl_complex_rect(4., 3253525.));
     gsl_matrix_complex_set(A, 0, 4, gsl_complex_rect(4., 4.));
-    gsl_matrix_complex_set(A, 0, 5, gsl_complex_rect(4., 4.));
+    gsl_matrix_complex_set(A, 0, 5, gsl_complex_rect(4., 5345435.));
     gsl_matrix_complex_set(A, 1, 0, gsl_complex_rect(23432432432., 234324324.));
     gsl_matrix_complex_set(A, 1, 1, gsl_complex_rect(2., 0.));
-    gsl_matrix_complex_set(A, 1, 2, gsl_complex_rect(1., 1.));
+    gsl_matrix_complex_set(A, 1, 2, gsl_complex_rect(1., 143543543.));
     gsl_matrix_complex_set(A, 1, 3, gsl_complex_rect(2., 2.));
     gsl_matrix_complex_set(A, 1, 4, gsl_complex_rect(4., 4.));
     gsl_matrix_complex_set(A, 1, 5, gsl_complex_rect(4., 4.));

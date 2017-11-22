@@ -9,9 +9,9 @@
 #include "macros.h"
 #include "matop.h"
 
-#define REP 1000
+#define REP 500
 #define ACTION_B actionD4D2_bruteforce
-#define ACTION actionD4D2t10
+#define ACTION actionD4D2t22
 
 int main()
 {
@@ -23,12 +23,12 @@ int main()
     gsl_rng_set(r, time(NULL));
 
     // file
-    FILE* fS = fopen("D4D2t10.txt", "w");
-    FILE* f2 = fopen("D4D2t10_time.txt", "w");
+    FILE* fS = fopen("D4D2t22.txt", "w");
+    FILE* f2 = fopen("D4D2t22_time.txt", "w");
 
     // action vector
-    double vecS[6];
-    int control[6] = {1,1,0,0,0,0};
+    double vecS[14];
+    int control[14] = {1,1,0,0,0,0,0,0,0,0,0,0,0,0};
     
     init_data();
     GEOM_CHECK();
