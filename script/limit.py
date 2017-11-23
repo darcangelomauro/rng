@@ -103,32 +103,63 @@ def gamma_check(gamma, a):
         tr = numpy.trace(mat)
 
         if tr != 0:
-            b.append([item[0], item[1], str(tr)])
+            b.append([[item[0][0]*tr, item[0][1]], item[1]])
 
     return b
 
 
 
-
+# perfrms first stage of simplification
 def shrink(a):
     
     b = []
-    for src in a:
 
+    for src in a:
         # check if element has already been accounted for
         check = 1
         for item in b:
             if src[1] == item[1]:
                 check = 0
+        
         # if not, find the sum
         if check:
             count = 0
             for comp in a:
                 if src[1] == comp[1]:
                     count += 1
-            b.append([str(count) + " * " + src[0], src[1]])
+            b.append([[count, src[0]], src[1]])
 
     return b
+
+# perfrms second stage of simplification
+def simplify(a):
+
+    b = []
+
+    for src in a:
+        # check if element has already been accounted for
+        check = 1
+        for item in b:
+            if src[0][1] == item[1]:
+                check = 0
+        
+        # if not, find the sum
+        if check:
+            count = 0
+            for comp in a:
+                if src[0][1] == comp[0][1]:
+                    count += comp[0][0]
+            b.append([count, src[0][1]])
+
+        # eliminate zero terms
+        for item in b:
+            if item[0] == 0:
+                b.pop(b.index(item))
+
+    return b
+
+
+
 
 
 # given an alphabet and two indices, gives the 2d slices corresponding to those coordinates 
@@ -157,6 +188,9 @@ def masterchef(alphabet, gamma, idx1, idx2):
     ls2_slice = [gamma_check(gamma, item) for item in ls2_slice]
     ls4_slice = [gamma_check(gamma, item) for item in ls4_slice]
 
+    ls2_slice = [simplify(item) for item in ls2_slice]
+    ls4_slice = [simplify(item) for item in ls4_slice]
+    
     return [ls2_slice, ls4_slice]
 
 # (3,1) geometry
