@@ -761,6 +761,7 @@ void multicode_wrapper(void Sfunc(double*, int*), void init_gamma(), int renorm,
         printf("Starting variable G simulation with data:\n");
         printf("%d values of G uniformly distributed in range [%lf, %lf]\n", REP_G, G_, (G_ + (REP_G-1)*INCR_G));
         printf("dim: %d\n", dim_);
+        printf("geometry: (%d, %d)\n", cliff_p, cliff_q);
         printf("Codename: %s\n", varG_code);
         printf("*********\n");
 
@@ -770,6 +771,8 @@ void multicode_wrapper(void Sfunc(double*, int*), void init_gamma(), int renorm,
         fprintf(fvarG_data, "G initial: %lf\n", G_);
         fprintf(fvarG_data, "G final: %lf\n", (G_ + (REP_G-1)*INCR_G));
         fprintf(fvarG_data, "dim: %d\n", dim_);
+        fprintf(fvarG_data, "p: %d\n", cliff_p);
+        fprintf(fvarG_data, "q: %d\n", cliff_q);
 
         // simulate with variable G
         print_time(fvarG_data, "start simulation:");

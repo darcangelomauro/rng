@@ -32,6 +32,9 @@
 
 
 #ifdef GEOM20
+#define cliff_p 2
+#define cliff_q 0
+
 #define P_actionD2 actionD2t20
 #define P_actionD4D2 actionD4D2t20
 #define P_actionD4D2_r actionD4D2t20_debug
@@ -47,6 +50,9 @@
 
 
 #ifdef GEOM11
+#define cliff_p 1
+#define cliff_q 1
+
 #define P_actionD2 actionD2t11
 #define P_actionD4D2 actionD4D2t11
 #define P_actionD4D2_r actionD4D2t11_debug
@@ -61,6 +67,9 @@
 #endif
 
 #ifdef GEOM01
+#define cliff_p 0
+#define cliff_q 1
+
 #define P_actionD2 actionD2t01
 #define P_actionD4D2 actionD4D2t01
 #define C_actionD2 actionD2t01()
@@ -73,6 +82,9 @@
 #endif
 
 #ifdef GEOM10
+#define cliff_p 1
+#define cliff_q 0
+
 #define P_actionD2 actionD2t10
 #define P_actionD4D2 actionD4D2t10
 #define C_actionD2 actionD2t10()
@@ -85,6 +97,9 @@
 #endif
 
 #ifdef GEOM02
+#define cliff_p 0
+#define cliff_q 2
+
 #define P_actionD2 actionD2t02
 #define P_actionD4D2 actionD4D2t02
 #define C_actionD2 actionD2t02()
@@ -97,6 +112,9 @@
 #endif
 
 #ifdef GEOM03
+#define cliff_p 0
+#define cliff_q 3
+
 #define P_actionD2 actionD2t03
 #define P_actionD4D2 actionD4D2t03
 #define C_actionD2 actionD2t03()
@@ -109,6 +127,9 @@
 #endif
 
 #ifdef GEOM13
+#define cliff_p 1
+#define cliff_q 3
+
 #define P_actionD2 actionD2t13
 #define P_actionD4D2 actionD4D2t13
 #define C_actionD2 actionD2t13()
@@ -121,6 +142,9 @@
 #endif
 
 #ifdef GEOM04
+#define cliff_p 0
+#define cliff_q 4
+
 #define P_actionD2 actionD2t04
 #define P_actionD4D2 actionD4D2t04
 #define C_actionD2 actionD2t04()
@@ -133,6 +157,9 @@
 #endif
 
 #ifdef GEOM40
+#define cliff_p 4
+#define cliff_q 0
+
 #define P_actionD2 actionD2t40
 #define P_actionD4D2 actionD4D2t40
 #define C_actionD2 actionD2t40()
@@ -145,6 +172,9 @@
 #endif
 
 #ifdef GEOM22
+#define cliff_p 2
+#define cliff_q 2
+
 #define P_actionD2 actionD2t22
 #define P_actionD4D2 actionD4D2t22
 #define C_actionD2 actionD2t22()
@@ -157,6 +187,9 @@
 #endif
 
 #ifdef GEOM31
+#define cliff_p 3
+#define cliff_q 1
+
 #define P_actionD2 actionD2t31
 #define P_actionD4D2 actionD4D2t31
 #define C_actionD2 actionD2t31()

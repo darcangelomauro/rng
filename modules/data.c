@@ -8,6 +8,7 @@
 #include <gsl/gsl_matrix_complex_double.h>
 #include <gsl/gsl_blas.h>
 #include "matop.h"
+#include "macros.h"
 #include "global.h"
 
 
@@ -27,6 +28,8 @@ void print_data(FILE* fdata)
     fprintf(fdata, "Ntherm: %d\n", Ntherm);
     fprintf(fdata, "Nsw: %d\n", Nsw);
     fprintf(fdata, "GAP: %d\n", GAP);
+    fprintf(fdata, "p: %d\n", cliff_p);
+    fprintf(fdata, "q: %d\n", cliff_q);
 }
 
 void print_time(FILE* fdata, char* s)
