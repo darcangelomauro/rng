@@ -15,30 +15,77 @@ int main(int argc, char** argv)
 {
     if(argc < 2)
     {
-        printf("gimme some code\n");
+        printf("gimme varG code \n");
         exit(EXIT_FAILURE);
     }
+    
+    // tells me if a folder has been specified
+    int folder = -2 + argc;
 
-    FILE* fres = fopen("out_pq20_dim10_1e7_2.txt", "w");
-    if(fres == NULL)
+    // allocate code filename and output filename
+    char* args;
+    char* output;
+    if(folder)
     {
-        printf("Error: unable to open output file\n");
-        exit(EXIT_FAILURE);
+        char* code = alloc_folder_filename(argv[1], argv[2]);
+        args = alloc_coded_filename("varG_args", code);
+        output = alloc_coded_filename("varG_average", code);
+        free(code);
+    }
+    else
+    {
+        args = alloc_coded_filename("varG_args", argv[1]);
+        output = alloc_coded_filename("varG_average", argv[1]);
     }
 
-    for(int i=0; i<argc-1; i++)
+    // open code file and output file
+    FILE* fargs = fopen(args, "r");
+    if(fargs == NULL)
     {
-        // avoid overwriting previous analysis
-        char* data = alloc_coded_filename("data", argv[i+1]);
+        printf("Error: unable to open codes file: %s\n", args);
+        exit(EXIT_FAILURE);
+    }
+    free(args);
+
+    FILE* foutput = fopen(output, "w");
+    if(foutput == NULL)
+    {
+        printf("Error: unable to open output file: %s\n", output);
+        exit(EXIT_FAILURE);
+    }
+    free(output);
+
+
+    char* read = malloc(200*sizeof(char));
+
+    while(fscanf(fargs, "%s", read) != EOF)
+    {
+        // open data file and simulation file
+        char* data; 
+        char* simS;
+        if(folder)
+        {
+            char* code;
+            code = alloc_folder_filename(read, argv[2]);
+            data = alloc_coded_filename("data", code);
+            simS = alloc_coded_filename("simS", code);
+            free(code);
+        }
+        else
+        {
+            data = alloc_coded_filename("data", read);
+            simS = alloc_coded_filename("simS", read);
+        }
         FILE* fdata = fopen(data, "r");
-        char* simS = alloc_coded_filename("simS", argv[i+1]);
         FILE* fsimS = fopen(simS, "r");
+
         if(fdata == NULL || fsimS == NULL)
         {
-            printf("Error: unable to read input file %s\n", argv[i+1]);
+            printf("Error: unable to read input file %s\n", read);
             exit(EXIT_FAILURE);
         }
 
+        printf("Processing: %s\n", read); 
 
         int narg=0;
         int dim_, nH_, nL_, Ntherm_, Nsw_, GAP_;
@@ -109,7 +156,7 @@ int main(int argc, char** argv)
                 obs[j] += tr[k][j]*tr[k][j];
                 norm += tr2[k][j];
             }
-            //obs[j] /= dim_*norm;
+            obs[j] /= dim_*norm;
             if(r1 != 2*nH_)
             {
                 printf("Error: not enough data in %s\n", data);
@@ -131,16 +178,16 @@ int main(int argc, char** argv)
         double varS = gsl_stats_variance(bin_S, 1, nbin);
         double meanobs = gsl_stats_mean(bin_obs, 1, nbin);
         double varobs = gsl_stats_variance(bin_obs, 1, nbin);
-        fprintf(fres, "%lf %lf %lf %lf %lf ", G_, meanS, sqrt(varS/(double)nbin), meanobs, sqrt(varobs/(double)nbin));
+        fprintf(foutput, "%lf %lf %lf %lf %lf ", G_, meanS, sqrt(varS/(double)nbin), meanobs, sqrt(varobs/(double)nbin));
         for(int j=0; j<nH_; j++)
         {
             double meantr = gsl_stats_mean(bin_tr[j], 1, nbin);
             double vartr = gsl_stats_variance(bin_tr[j], 1, nbin);
             double meantr2 = gsl_stats_mean(bin_tr2[j], 1, nbin);
             double vartr2 = gsl_stats_variance(bin_tr2[j], 1, nbin);
-            fprintf(fres, "%lf %lf %lf %lf ", meantr, sqrt(vartr/(double)nbin), meantr2, sqrt(vartr2/(double)nbin));
+            fprintf(foutput, "%lf %lf %lf %lf ", meantr, sqrt(vartr/(double)nbin), meantr2, sqrt(vartr2/(double)nbin));
         }
-        fprintf(fres, "\n");
+        fprintf(foutput, "\n");
 
         free(S);
         free(obs);
@@ -163,6 +210,7 @@ int main(int argc, char** argv)
         fclose(fsimS);
     }
 
-    fclose(fres);
+    fclose(foutput);
+    fclose(fargs);
 
 }

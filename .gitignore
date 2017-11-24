@@ -14,6 +14,12 @@ devel/matop_test/*
 !devel/matop_test/*.c
 !devel/matop_test/Makefile
 
+# ignore everything
+devel/fileop_test/*
+
+# unignore .c and Makefile
+!devel/fileop_test/*.c
+!devel/fileop_test/Makefile
 
 
 

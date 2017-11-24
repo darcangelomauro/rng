@@ -50,6 +50,45 @@ char* alloc_coded_filename(char* suffix, char* code)
     return name;
 }
 
+char* alloc_folder_filename(char* suffix, char* folder)
+{
+    int n = strlen(folder);
+    int m = strlen(suffix);
+    char* name;
+
+    // check if / was included in the last folder name
+    int check = 0;
+    if(folder[n-1] == '/')
+        check = 1;
+
+    // allocate memory 
+    if(check)
+        name = malloc((n+m+1)*sizeof(char));
+    else
+        name = malloc((n+m+2)*sizeof(char));
+
+    // put folder name
+    for(int i=0; i<n; i++)
+        name[i] = folder[i];
+    
+    // if / was included, put suffix
+    if(check)
+    {
+        for(int i=0; i<m; i++)
+            name[i+n] = suffix[i];
+        name[n+m] = '\0';
+    }
+    // if / was not included, write it and then write suffix
+    else
+    {
+        name[n] = '/';
+        for(int i=0; i<m; i++)
+            name[i+n+1] = suffix[i];
+        name[n+m+1] = '\0';
+    }
+
+    return name;
+}
 
 
 
